@@ -1,0 +1,12 @@
+prefix=@CMAKE_INSTALL_PREFIX@
+exec_prefix=@CMAKE_INSTALL_PREFIX@
+libdir=${prefix}/lib
+includedir=${prefix}/include
+
+Name: underwater_simulator-viz
+Description: vizKit plugin for the underwater_simulator library
+Requires: underwater_simulator @PKGCONFIG_DEPS@
+Version: @PROJECT_VERSION@
+Libs: -L${libdir} -lunderwater_simulator-viz
+Cflags: -I${includedir}
+
