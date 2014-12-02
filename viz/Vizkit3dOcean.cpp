@@ -33,7 +33,6 @@ osg::ref_ptr<osg::Node> Vizkit3dOcean::createMainNode()
 
 void Vizkit3dOcean::updateMainNode ( osg::Node* node )
 {
-    osg::Geode* geode = static_cast<osg::Geode*>(node);
 }
 
 void Vizkit3dOcean::updateDataIntern(base::Vector3d const& value)
