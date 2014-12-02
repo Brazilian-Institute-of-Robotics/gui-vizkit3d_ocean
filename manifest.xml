@@ -7,11 +7,7 @@
   <url>http://</url>
   
   <depend package="base/cmake" />
-  <depend package="gui/vizkit" />
+  <depend package="gui/vizkit3d" />
   <depend package="base/types" />
-  <depend package="osg" />
-  
-  <!-- os dependencies -->
-  <rosdep name="osg" />
-  
+  <depend package="gui/osg_ocean" />
 </package>
