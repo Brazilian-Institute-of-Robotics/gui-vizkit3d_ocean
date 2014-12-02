@@ -54,7 +54,6 @@ private:
 			float crestFoamHeight);
 
 	osg::ref_ptr<osg::TextureCubeMap> loadCubeMapTextures(const std::string& dir);
-	osg::Node* loadIslands(void);
 
     osg::ref_ptr<osgOcean::OceanScene> _oceanScene;
     osg::ref_ptr<osgOcean::FFTOceanSurface> _oceanSurface;
@@ -76,9 +75,6 @@ private:
     SCENE_TYPE _sceneType;
 
     osg::ref_ptr<SkyDome> _skyDome;
-
-//    osg::ref_ptr<osg::Switch> _islandSwitch;
-
 };
 
 #endif /* SCENEMODEL_H_ */

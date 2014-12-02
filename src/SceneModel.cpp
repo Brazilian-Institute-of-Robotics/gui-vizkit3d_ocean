@@ -15,7 +15,6 @@
 #include <osgOcean/ShaderManager>
 #include "SceneModel.h"
 
-
 class CameraTrackCallback: public osg::NodeCallback
 {
 public:
@@ -175,10 +174,6 @@ void SceneModel::build(const osg::Vec2f& windDirection,
 	stateset->setTextureMode(0,GL_TEXTURE_2D,osg::StateAttribute::ON);
 	stateset->setTextureMode(0,GL_TEXTURE_3D,osg::StateAttribute::OFF);
 
-	osg::ref_ptr<osg::Node> islandModel = loadIslands();
-
-	if( islandModel.valid() ) _oceanScene->addChild(islandModel.get());
-
 	osg::LightSource* lightSource = new osg::LightSource();
 	lightSource->setLocalStateSetModes();
 
@@ -240,39 +235,4 @@ osg::ref_ptr<osg::TextureCubeMap> SceneModel::loadCubeMapTextures(const std::str
 	cubeMap->setImage(osg::TextureCubeMap::POSITIVE_Z, osgDB::readImageFile( filenames[POS_Z] ) );
 
 	return cubeMap;
-}
-
-
-osg::Node* SceneModel::loadIslands(void)
-{
-	const std::string filename = "vizkit3d_ocean/islands/islands.ive";
-	osg::ref_ptr<osg::Node> island = osgDB::readNodeFile(filename);
-
-	if(!island.valid()){
-		osg::notify(osg::WARN) << "Could not find: " << filename << std::endl;
-		return NULL;
-	}
-
-//#ifdef USE_CUSTOM_SHADER
-	static const char terrain_vertex[]   = "vizkit3d_ocean/islands/terrain.vert";
-	static const char terrain_fragment[] = "vizkit3d_ocean/islands/terrain.frag";
-
-	osg::Program* program = osgOcean::ShaderManager::instance().createProgram("terrain", terrain_vertex, terrain_fragment, true);
-	program->addBindAttribLocation("aTangent", 6);
-//#endif
-	island->setNodeMask( _oceanScene->getNormalSceneMask() | _oceanScene->getReflectedSceneMask() | _oceanScene->getRefractedSceneMask() );
-	island->getStateSet()->addUniform( new osg::Uniform( "uTextureMap", 0 ) );
-
-//#ifdef USE_CUSTOM_SHADER
-	island->getOrCreateStateSet()->setAttributeAndModes(program,osg::StateAttribute::ON);
-	island->getStateSet()->addUniform( new osg::Uniform( "uOverlayMap", 1 ) );
-	island->getStateSet()->addUniform( new osg::Uniform( "uNormalMap",  2 ) );
-//#endif
-
-	osg::PositionAttitudeTransform* islandpat = new osg::PositionAttitudeTransform;
-	islandpat->setPosition(osg::Vec3f( -island->getBound().center()+osg::Vec3f(0.0, 0.0, -15.f) ) );
-	islandpat->setScale( osg::Vec3f(4.f, 4.f, 3.f ) );
-	islandpat->addChild(island.get());
-
-	return islandpat;
 }
