@@ -9,9 +9,10 @@
 #include <osg/ShapeDrawable>
 #include <osg/MatrixTransform>
 #include <osg/PositionAttitudeTransform>
+#include <osgDB/FileUtils>
+#include <stdexcept>
 
 #include <osgOcean/ShaderManager>
-#include <osgOcean/config.h>
 #include "SceneModel.h"
 
 
@@ -50,9 +51,9 @@ SceneModel::SceneModel(const osg::Vec2f& windDirection,
 					float choppyFactor,
 					float crestFoamHeight) : _sceneType(CLEAR)
 {
-    _cubemapDirs.push_back( "sky_clear" );
-    _cubemapDirs.push_back( "sky_dusk" );
-    _cubemapDirs.push_back( "sky_fair_cloudy" );
+    _cubemapDirs.push_back( "vizkit3d_ocean/textures/sky_clear" );
+    _cubemapDirs.push_back( "vizkit3d_ocean/textures/sky_dusk" );
+    _cubemapDirs.push_back( "vizkit3d_ocean/textures/sky_fair_cloudy" );
 
     _lightColors.push_back( intColor( 105,138,174 ));
     _lightColors.push_back( intColor( 105,138,174 ));
@@ -100,7 +101,7 @@ void SceneModel::build(const osg::Vec2f& windDirection,
 {
 	_scene = new osg::Group();
 
-	_cubemap = loadCubeMapTextures( _cubemapDirs[_sceneType] );
+    _cubemap = loadCubeMapTextures( _cubemapDirs[_sceneType] );
 
     _oceanSurface = new osgOcean::FFTOceanSurface( 64, 256, 17,
         windDirection, windSpeed, depth, reflectionDamping, waveScale, isChoppy, choppyFactor, 10.f, 256 );
@@ -210,12 +211,17 @@ osg::ref_ptr<osg::TextureCubeMap> SceneModel::loadCubeMapTextures(const std::str
 
 	std::string filenames[6];
 
-	filenames[POS_X] = RESOURCE_PATH_STL + "/resources/textures/" + dir + "/east.png";
-	filenames[NEG_X] = RESOURCE_PATH_STL + "/resources/textures/" + dir + "/west.png";
-	filenames[POS_Z] = RESOURCE_PATH_STL + "/resources/textures/" + dir + "/north.png";
-	filenames[NEG_Z] = RESOURCE_PATH_STL + "/resources/textures/" + dir + "/south.png";
-	filenames[POS_Y] = RESOURCE_PATH_STL + "/resources/textures/" + dir + "/down.png";
-	filenames[NEG_Y] = RESOURCE_PATH_STL + "/resources/textures/" + dir + "/up.png";
+	filenames[POS_X] = osgDB::findDataFile(dir + "/east.png");
+	filenames[NEG_X] = osgDB::findDataFile(dir + "/west.png");
+	filenames[POS_Z] = osgDB::findDataFile(dir + "/north.png");
+	filenames[NEG_Z] = osgDB::findDataFile(dir + "/south.png");
+	filenames[POS_Y] = osgDB::findDataFile(dir + "/down.png");
+	filenames[NEG_Y] = osgDB::findDataFile(dir + "/up.png");
+        for (int i = 0; i < 6; ++i)
+        {
+            if (filenames[i].empty())
+                throw std::runtime_error("cannot find required cubemap texture in " + dir);
+        }
 
 	osg::ref_ptr<osg::TextureCubeMap> cubeMap = new osg::TextureCubeMap;
 	cubeMap->setInternalFormat(GL_RGBA);
@@ -239,9 +245,7 @@ osg::ref_ptr<osg::TextureCubeMap> SceneModel::loadCubeMapTextures(const std::str
 
 osg::Node* SceneModel::loadIslands(void)
 {
-	osgDB::Registry::instance()->getDataFilePathList().push_back( RESOURCE_PATH_STL + "/resources/island");
-
-	const std::string filename = "islands.ive";
+	const std::string filename = "vizkit3d_ocean/islands/islands.ive";
 	osg::ref_ptr<osg::Node> island = osgDB::readNodeFile(filename);
 
 	if(!island.valid()){
@@ -250,8 +254,8 @@ osg::Node* SceneModel::loadIslands(void)
 	}
 
 //#ifdef USE_CUSTOM_SHADER
-	static const char terrain_vertex[]   = "terrain.vert";
-	static const char terrain_fragment[] = "terrain.frag";
+	static const char terrain_vertex[]   = "vizkit3d_ocean/islands/terrain.vert";
+	static const char terrain_fragment[] = "vizkit3d_ocean/islands/terrain.frag";
 
 	osg::Program* program = osgOcean::ShaderManager::instance().createProgram("terrain", terrain_vertex, terrain_fragment, true);
 	program->addBindAttribLocation("aTangent", 6);
