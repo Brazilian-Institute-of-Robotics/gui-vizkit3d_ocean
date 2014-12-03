@@ -1,15 +1,15 @@
-#ifndef vizkit3d_ocean_Vizkit3dOcean_H
-#define vizkit3d_ocean_Vizkit3dOcean_H
+#ifndef vizkit3d_ocean_Ocean_H
+#define vizkit3d_ocean_Ocean_H
 
 #include <boost/noncopyable.hpp>
 #include <vizkit3d/Vizkit3DPlugin.hpp>
 #include <osg/Geode>
 #include <base/Eigen.hpp>
-#include <underwater_simulator/SceneModel.h>
+#include <vizkit3d_ocean/SceneModel.h>
 
 namespace vizkit3d
 {
-class Vizkit3dOcean
+class Ocean
 	: public vizkit3d::Vizkit3DPlugin<base::Vector3d>
 	, boost::noncopyable
 {
@@ -18,8 +18,8 @@ Q_OBJECT
 
 public:
 
-	Vizkit3dOcean();
-	~Vizkit3dOcean();
+	Ocean();
+	~Ocean();
 
 	Q_INVOKABLE void updateData(base::Vector3d const &sample)
 	{

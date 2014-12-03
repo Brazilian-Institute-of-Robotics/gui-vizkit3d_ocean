@@ -1,6 +1,6 @@
 rock_vizkit_plugin(vizkit3d_ocean-viz
-    Vizkit3dOcean.cpp
+    Ocean.cpp
     DEPS vizkit3d_ocean
     DEPS_PKGCONFIG base-types
-    MOC Vizkit3dOcean.hpp
-    HEADERS Vizkit3dOcean.hpp)
+    MOC Ocean.hpp
+    HEADERS Ocean.hpp)
