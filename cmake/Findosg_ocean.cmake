@@ -1,12 +1,12 @@
 find_path(
     OSGOCEAN_INCLUDE_DIR
-    NAMES	osgOcean/OceanScene osgOcean/FFTOceanSurface osgOcean/ShaderManager osgOcean/config.h
+    NAMES	osgOcean/OceanScene osgOcean/FFTOceanSurface osgOcean/ShaderManager
     HINTS 	$ENV{CMAKE_INSTALL_PREFIX}/include
 )
 
 find_library(
     OSGOCEAN_LIBRARY
-    NAMES osgOceanD
+    NAMES osgOcean
     PATHS $ENV{CMAKE_INSTALL_PREFIX}/lib
 )
 

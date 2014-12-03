@@ -212,11 +212,12 @@ osg::ref_ptr<osg::TextureCubeMap> SceneModel::loadCubeMapTextures(const std::str
 	filenames[NEG_Z] = osgDB::findDataFile(dir + "/south.png");
 	filenames[POS_Y] = osgDB::findDataFile(dir + "/down.png");
 	filenames[NEG_Y] = osgDB::findDataFile(dir + "/up.png");
-        for (int i = 0; i < 6; ++i)
-        {
-            if (filenames[i].empty())
-                throw std::runtime_error("cannot find required cubemap texture in " + dir);
-        }
+
+	for (int i = 0; i < 6; ++i)
+	{
+		if (filenames[i].empty())
+			throw std::runtime_error("cannot find required cubemap texture in " + dir);
+	}
 
 	osg::ref_ptr<osg::TextureCubeMap> cubeMap = new osg::TextureCubeMap;
 	cubeMap->setInternalFormat(GL_RGBA);
