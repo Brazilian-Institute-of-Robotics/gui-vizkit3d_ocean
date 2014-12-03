@@ -1,11 +1,10 @@
 <package>
-  <description brief="Underwater Simulator">
-  Underwater Simulator
+  <description brief="Vizkit3d Ocean plugin">
+  Vizkit3d Ocean plugin
   </description>
   <author>Gustavo Neves/gustavo.neves12@gmail.com</author>
   <license></license>
   <url>http://</url>
-  <logo>http://</logo>
   
   <depend package="base/cmake" />
   <depend package="gui/vizkit" />

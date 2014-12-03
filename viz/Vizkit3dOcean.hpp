@@ -1,5 +1,5 @@
-#ifndef underwater_simulator_UnderwaterSimulator_H
-#define underwater_simulator_UnderwaterSimulator_H
+#ifndef vizkit3d_ocean_Vizkit3dOcean_H
+#define vizkit3d_ocean_Vizkit3dOcean_H
 
 #include <boost/noncopyable.hpp>
 #include <vizkit3d/Vizkit3DPlugin.hpp>
@@ -9,17 +9,17 @@
 
 namespace vizkit3d
 {
-    class UnderwaterSimulator
-        : public vizkit3d::Vizkit3DPlugin<base::Vector3d>
-        , boost::noncopyable
+class Vizkit3dOcean
+	: public vizkit3d::Vizkit3DPlugin<base::Vector3d>
+	, boost::noncopyable
 {
 
-    Q_OBJECT
+Q_OBJECT
 
 public:
 
-	UnderwaterSimulator();
-	~UnderwaterSimulator();
+	Vizkit3dOcean();
+	~Vizkit3dOcean();
 
 	Q_INVOKABLE void updateData(base::Vector3d const &sample)
 	{
@@ -36,7 +36,7 @@ private:
 	Data* p;
 
 	SceneModel *_sceneModel;
-};
 
+};
 }
 #endif

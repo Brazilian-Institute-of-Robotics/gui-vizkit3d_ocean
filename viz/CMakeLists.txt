@@ -1,6 +1,6 @@
-rock_vizkit_plugin(underwater_simulator-viz
-    UnderwaterSimulator.cpp
-    DEPS underwater_simulator
-    MOC UnderwaterSimulator.hpp
-    HEADERS UnderwaterSimulator.hpp)
+rock_vizkit_plugin(vizkit3d_ocean-viz
+    Vizkit3dOcean.cpp
+    DEPS vizkit3d_ocean
+    MOC Vizkit3dOcean.hpp
+    HEADERS Vizkit3dOcean.hpp)
 

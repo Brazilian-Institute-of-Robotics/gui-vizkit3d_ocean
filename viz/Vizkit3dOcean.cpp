@@ -2,26 +2,26 @@
 #include <osgViewer/View>
 #include <osgGA/TrackballManipulator>
 #include <vizkit3d/Vizkit3DWidget.hpp>
-#include "UnderwaterSimulator.hpp"
+#include "Vizkit3dOcean.hpp"
 
 using namespace vizkit3d;
 
-struct UnderwaterSimulator::Data {
+struct Vizkit3dOcean::Data {
     base::Vector3d data;
 };
 
 
-UnderwaterSimulator::UnderwaterSimulator()
+Vizkit3dOcean::Vizkit3dOcean()
     : p(new Data)
 {
 }
 
-UnderwaterSimulator::~UnderwaterSimulator()
+Vizkit3dOcean::~Vizkit3dOcean()
 {
     delete p;
 }
 
-osg::ref_ptr<osg::Node> UnderwaterSimulator::createMainNode()
+osg::ref_ptr<osg::Node> Vizkit3dOcean::createMainNode()
 {
 	Vizkit3DWidget * widget = dynamic_cast<Vizkit3DWidget *>(this->parent());
 
@@ -47,16 +47,16 @@ osg::ref_ptr<osg::Node> UnderwaterSimulator::createMainNode()
     return _sceneModel->getScene();
 }
 
-void UnderwaterSimulator::updateMainNode ( osg::Node* node )
+void Vizkit3dOcean::updateMainNode ( osg::Node* node )
 {
     osg::Geode* geode = static_cast<osg::Geode*>(node);
 }
 
-void UnderwaterSimulator::updateDataIntern(base::Vector3d const& value)
+void Vizkit3dOcean::updateDataIntern(base::Vector3d const& value)
 {
     p->data = value;
+    std::cout << "got new sample data" << std::endl;
 }
 
-//Macro that makes this plugin loadable in ruby, this is optional.
-VizkitQtPlugin(UnderwaterSimulator)
+VizkitQtPlugin(Vizkit3dOcean)
 

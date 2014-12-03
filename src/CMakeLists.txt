@@ -1,6 +1,6 @@
 include_directories(${OSGOCEAN_INCLUDE_DIR})
 
-rock_library(underwater_simulator
+rock_library(vizkit3d_ocean
     SOURCES 
         SceneModel.cpp 
         SkyDome.cpp 

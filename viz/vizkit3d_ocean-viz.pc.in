@@ -1,0 +1,12 @@
+prefix=@CMAKE_INSTALL_PREFIX@
+exec_prefix=@CMAKE_INSTALL_PREFIX@
+libdir=${prefix}/lib
+includedir=${prefix}/include
+
+Name: vizkit3d_ocean-viz
+Description: vizKit plugin for the vizkit3d_ocean library
+Requires: vizkit3d_ocean @PKGCONFIG_DEPS@
+Version: @PROJECT_VERSION@
+Libs: -L${libdir} -lvizkit3d_ocean-viz
+Cflags: -I${includedir}
+

@@ -1,2 +1,2 @@
-Vizkit::UiLoader.register_3d_plugin('UnderwaterSimulator', 'underwater_simulator', 'UnderwaterSimulator')
-Vizkit::UiLoader.register_3d_plugin_for('UnderwaterSimulator', "/base/Vector3d", :updateData )
+Vizkit::UiLoader.register_3d_plugin('Vizkit3dOcean', 'vizkit3d_ocean', 'Vizkit3dOcean')
+Vizkit::UiLoader.register_3d_plugin_for('Vizkit3dOcean', "/base/Vector3d", :updateData )
