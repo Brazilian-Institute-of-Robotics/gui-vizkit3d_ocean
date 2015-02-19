@@ -15,26 +15,6 @@
 #include <osgOcean/ShaderManager>
 #include "SceneModel.h"
 
-class CameraTrackCallback: public osg::NodeCallback
-{
-public:
-    virtual void operator()(osg::Node* node, osg::NodeVisitor* nv)
-    {
-        if( nv->getVisitorType() == osg::NodeVisitor::CULL_VISITOR )
-        {
-            osgUtil::CullVisitor* cv = static_cast<osgUtil::CullVisitor*>(nv);
-            osg::Vec3f centre,up,eye;
-            // get MAIN camera eye,centre,up
-            cv->getRenderStage()->getCamera()->getViewMatrixAsLookAt(eye,centre,up);
-            // update position
-            osg::MatrixTransform* mt = static_cast<osg::MatrixTransform*>(node);
-            mt->setMatrix( osg::Matrix::translate( eye.x(), eye.y(), mt->getMatrix().getTrans().z() ) );
-        }
-
-        traverse(node, nv);
-    }
-};
-
 osg::Vec4f intColor(unsigned int r, unsigned int g, unsigned int b, unsigned int a = 255)
 {
 	float div = 1.f/255.f;
@@ -98,81 +78,10 @@ void SceneModel::build(const osg::Vec2f& windDirection,
 					float choppyFactor,
 					float crestFoamHeight)
 {
-	_scene = new osg::Group();
+    _scene = new osg::Group();
 
     _cubemap = loadCubeMapTextures( _cubemapDirs[_sceneType] );
 
-    _oceanSurface = new osgOcean::FFTOceanSurface( 64, 256, 17,
-        windDirection, windSpeed, depth, reflectionDamping, waveScale, isChoppy, choppyFactor, 10.f, 256 );
-    _oceanScene = new osgOcean::OceanScene( _oceanSurface.get() );
-
-    _oceanSurface->setEnvironmentMap( _cubemap.get() );
-    _oceanSurface->setFoamBottomHeight( 2.2f );
-    _oceanSurface->setFoamTopHeight( 3.0f );
-    _oceanSurface->setLightColor(_lightColors[_sceneType]);
-//
-    // Make the ocean surface track with the main camera position, giving the illusion
-    // of an endless ocean surface.
-    _oceanSurface->enableEndlessOcean(true);
-    _oceanSurface->enableCrestFoam(true);
-    _oceanScene->enableReflections(true);
-    _oceanScene->enableRefractions(true);
-    _oceanScene->enableGodRays(true);
-    _oceanScene->enableSilt(true);
-    _oceanScene->enableUnderwaterDOF(true);
-    _oceanScene->enableDistortion(true);
-    _oceanScene->enableGlare(false);
-
-    osg::Vec3f sunDir = -_sunPositions[_sceneType];
-    sunDir.normalize();
-
-    _oceanScene->setLightID(0);
-
-    // Set the size of _oceanCylinder which follows the camera underwater.
-    // This cylinder prevents the clear from being visible past the far plane
-    // instead it will be the fog color.
-    // The size of the cylinder should be changed according the size of the ocean surface.
-    _oceanScene->setCylinderSize( 1900.f, 4000.f );
-
-    _oceanScene->setAboveWaterFog(0.0012f, _fogColors[_sceneType] );
-    _oceanScene->setUnderwaterFog(0.002f,  _waterFogColors[_sceneType] );
-    _oceanScene->setUnderwaterDiffuse( _underwaterDiffuse[_sceneType] );
-    _oceanScene->setUnderwaterAttenuation( _underwaterAttenuations[_sceneType] );
-
-    _oceanScene->setSunDirection( sunDir );
-    _oceanScene->setGlareAttenuation(0.8f);
-
-    // create sky dome and add to ocean scene
-    // set masks so it appears in reflected scene and normal scene
-    _skyDome = new SkyDome( 1900.f, 16, 16, _cubemap.get() );
-    _skyDome->setNodeMask( _oceanScene->getReflectedSceneMask() | _oceanScene->getNormalSceneMask() );
-
-    // add a pat to track the camera
-    osg::MatrixTransform* transform = new osg::MatrixTransform();
-    transform->setDataVariance( osg::Object::DYNAMIC );
-    transform->setMatrix( osg::Matrixf::translate( osg::Vec3f(0.f, 0.f, 0.f) ));
-    transform->setCullCallback( new CameraTrackCallback() );
-
-    _oceanScene->addChild( _skyDome.get() );
-
-    // Create and add fake texture for use with nodes without any texture
-    // since the OceanScene default scene shader assumes that texture unit
-    // 0 is used as a base texture map.
-    osg::Image * image = new osg::Image();
-    image->allocateImage( 1, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE );
-    *(osg::Vec4ub*)image->data() = osg::Vec4ub( 0xFF, 0xFF, 0xFF, 0xFF );
-
-    osg::Texture2D* fakeTex = new osg::Texture2D( image );
-    fakeTex->setWrap(osg::Texture2D::WRAP_S,osg::Texture2D::REPEAT);
-    fakeTex->setWrap(osg::Texture2D::WRAP_T,osg::Texture2D::REPEAT);
-    fakeTex->setFilter(osg::Texture2D::MIN_FILTER,osg::Texture2D::NEAREST);
-    fakeTex->setFilter(osg::Texture2D::MAG_FILTER,osg::Texture2D::NEAREST);
-
-    osg::StateSet* stateset = _oceanScene->getOrCreateStateSet();
-    stateset->setTextureAttribute(0,fakeTex,osg::StateAttribute::ON);
-    stateset->setTextureMode(0,GL_TEXTURE_1D,osg::StateAttribute::OFF);
-    stateset->setTextureMode(0,GL_TEXTURE_2D,osg::StateAttribute::ON);
-    stateset->setTextureMode(0,GL_TEXTURE_3D,osg::StateAttribute::OFF);
 
     osg::LightSource* lightSource = new osg::LightSource();
     lightSource->setLocalStateSetModes();
@@ -228,7 +137,7 @@ osg::ref_ptr<osg::TextureCubeMap> SceneModel::loadCubeMapTextures(const std::str
 	cubeMap->setWrap(osg::Texture::WRAP_S, osg::Texture::CLAMP_TO_EDGE);
 	cubeMap->setWrap(osg::Texture::WRAP_T, osg::Texture::CLAMP_TO_EDGE);
 
-	cubeMap->setImage(osg::TextureCubeMap::NEGATIVE_X, osgDB::readImageFile( filenames[NEG_X] ) );
+	cubeMap->setImage(osg::TextureCubeMap::NEGATIVE_X,  );
 	cubeMap->setImage(osg::TextureCubeMap::POSITIVE_X, osgDB::readImageFile( filenames[POS_X] ) );
 	cubeMap->setImage(osg::TextureCubeMap::NEGATIVE_Y, osgDB::readImageFile( filenames[NEG_Y] ) );
 	cubeMap->setImage(osg::TextureCubeMap::POSITIVE_Y, osgDB::readImageFile( filenames[POS_Y] ) );

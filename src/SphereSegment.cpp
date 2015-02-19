@@ -15,7 +15,9 @@
 * http://www.gnu.org/copyleft/lesser.txt.
 */
 
-#include "SphereSegment.h"
+#include <vizkit3d_ocean/SphereSegment.hpp>
+
+using namespace vizkit3d_ocean;
 
 SphereSegment::SphereSegment(void)
 {}

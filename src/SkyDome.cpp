@@ -15,8 +15,10 @@
 * http://www.gnu.org/copyleft/lesser.txt.
 */
 
-#include "SkyDome.h"
+#include <vizkit3d_ocean/SkyDome.hpp>
 #include <osgOcean/ShaderManager>
+
+using namespace vizkit3d_ocean;
 
 SkyDome::SkyDome( void )
 {
