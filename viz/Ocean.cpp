@@ -112,7 +112,6 @@ ref_ptr<Node> Ocean::createMainNode()
     updateLight(light);
 
     Group* mainNode = new Group;
-    mainNode->addChild(surface);
     mainNode->addChild(scene);
     scene->addChild(ref_node);
     mainNode->addChild(light);
