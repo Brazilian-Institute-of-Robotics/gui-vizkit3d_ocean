@@ -86,10 +86,16 @@ Ocean::Ocean()
     , glare(true)
 {
     loadCubeMapImages(cubeMapPath);
+    ref_node = new osg::Group;
 }
 
 Ocean::~Ocean()
 {
+}
+
+ref_ptr<Group> Ocean::getRefNode()
+{
+    return ref_node;
 }
 
 ref_ptr<Node> Ocean::createMainNode()
@@ -108,6 +114,7 @@ ref_ptr<Node> Ocean::createMainNode()
     Group* mainNode = new Group;
     mainNode->addChild(surface);
     mainNode->addChild(scene);
+    scene->addChild(ref_node);
     mainNode->addChild(light);
 
     osg::ref_ptr<osg::StateSet> state = mainNode->getOrCreateStateSet();

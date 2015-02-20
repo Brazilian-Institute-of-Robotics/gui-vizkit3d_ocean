@@ -2,7 +2,7 @@
 #define vizkit3d_ocean_Ocean_H
 
 #include <boost/noncopyable.hpp>
-#include <vizkit3d/Vizkit3DPlugin.hpp>
+#include <vizkit3d/EnvPluginBase.hpp>
 #include <osg/Geode>
 #include <base/Eigen.hpp>
 
@@ -27,7 +27,7 @@ namespace vizkit3d
 {
 
 class Ocean
-	: public vizkit3d::Vizkit3DPlugin<base::Vector3d>
+	: public vizkit3d::EnvPluginBase
 	, boost::noncopyable
 {
 
@@ -45,11 +45,6 @@ public:
 
 	Ocean();
 	~Ocean();
-
-	Q_INVOKABLE void updateData(base::Vector3d const &sample)
-	{
-            vizkit3d::Vizkit3DPlugin<base::Vector3d>::updateData(sample);
-	}
 
 protected:
 	virtual osg::ref_ptr<osg::Node> createMainNode();
@@ -69,7 +64,11 @@ protected:
         vizkit3d_ocean::SkyDome* createSkyDome(osg::TextureCubeMap* cubeMap);
         void updateSkyDome(vizkit3d_ocean::SkyDome* dome, osgOcean::OceanScene* scene);
 
+        osg::ref_ptr<osg::Group> getRefNode();
+
 private:
+        osg::ref_ptr<osg::Group> ref_node;
+
         bool      cubeMapDirty;
         QString   cubeMapPath;
         osg::ref_ptr<osg::Image> cubeMapImages[6];
