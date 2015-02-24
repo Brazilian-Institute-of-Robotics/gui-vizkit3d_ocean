@@ -108,8 +108,8 @@ ref_ptr<Group> Ocean::getRefNode()
 void Ocean::setupShader(osg::Node* node)
 {
 
-	static const char model_vertex[] = "default_scene.vert";
-	static const char model_fragment[] = "default_scene.frag";
+	static const char model_vertex[] = "vizkit3d_ocean/shaders/default_scene.vert";
+	static const char model_fragment[] = "vizkit3d_ocean/shaders/default_scene.frag";
 
 	osg::ref_ptr<osg::Program> program =
 			osgOcean::ShaderManager::instance().createProgram(
