@@ -7,7 +7,7 @@ view3d = Vizkit.vizkit3d_widget
 
 ocean = Vizkit.default_loader.Ocean
 
-view3d.setGrid(false)
+#view3d.setGrid(false)
 view3d.setCameraManipulator("Trackball")
 view3d.setEnvironmentPlugin(ocean)
 view3d.setAxes(false);
