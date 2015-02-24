@@ -74,7 +74,7 @@ Ocean::Ocean()
     , sceneDirty(false)
     , airFogColor(199, 226, 255)
     , airFogDensity(0.0012)
-    , sunPosition(326, 1212, 1275)
+    , sunPosition(326.573, 1212.99, 1275.19)
     , sunDiffuseColor(191, 191, 191)
     , uwFogColor(27, 57, 109)
     , uwFogDensity(0.002)
@@ -87,10 +87,10 @@ Ocean::Ocean()
     , heightmap(true)
     , godRays(true)
     , silt(true)
-    , underwaterDOF(true)
+    , underwaterDOF(false)
     , underwaterScattering(true)
-    , distortion(false)
-    , glare(true)
+    , distortion(true)
+    , glare(false)
 {
     loadCubeMapImages(cubeMapPath);
     ref_node = new osg::Group;
@@ -105,50 +105,76 @@ ref_ptr<Group> Ocean::getRefNode()
     return ref_node;
 }
 
+void Ocean::setupShader(osg::Node* node)
+{
+
+	static const char model_vertex[] = "default_scene.vert";
+	static const char model_fragment[] = "default_scene.frag";
+
+	osg::ref_ptr<osg::Program> program =
+			osgOcean::ShaderManager::instance().createProgram(
+					"object_shader", model_vertex, model_fragment, "", "");
+
+	if (program.valid()) {
+		program->addBindAttribLocation("aTangent", 6);
+		node->getOrCreateStateSet()->setAttributeAndModes(program,
+				osg::StateAttribute::ON);
+		node->getStateSet()->addUniform(
+				new osg::Uniform("uOverlayMap", 1));
+		node->getStateSet()->addUniform(
+				new osg::Uniform("uNormalMap", 2));
+	}
+}
+
 ref_ptr<Node> Ocean::createMainNode()
 {
-    Group* mainNode = new Group;
+	Group* mainNode = new Group;
 
-    osg::ref_ptr<osg::StateSet> state = mainNode->getOrCreateStateSet();
-    state->setGlobalDefaults();
-    state->setDataVariance(osg::Object::DYNAMIC);
+	osg::ref_ptr<osg::StateSet> state = mainNode->getOrCreateStateSet();
+	state->setGlobalDefaults();
+	state->setDataVariance(osg::Object::DYNAMIC);
 
-    TextureCubeMap* cubeMap = createCubeMap();
-    updateCubeMap(cubeMap);
+	TextureCubeMap* cubeMap = createCubeMap();
+	updateCubeMap(cubeMap);
 
-    FFTOceanTechnique* surface = createSurface();
-    updateSurface(surface, cubeMap);
+	FFTOceanTechnique* surface = createSurface();
+	updateSurface(surface, cubeMap);
 
-    OceanScene* scene = createScene(surface);
-    updateScene(scene);
+	OceanScene* scene = createScene(surface);
+	updateScene(scene);
 
-    vizkit3d_ocean::SkyDome* dome = createSkyDome(cubeMap);
-    updateSkyDome(dome, scene);
+	vizkit3d_ocean::SkyDome* dome = createSkyDome(cubeMap);
+	updateSkyDome(dome, scene);
 
-    LightSource* light = createLight();
-    updateLight(light);
+	LightSource* light = createLight();
+	updateLight(light);
 
+	// add a pat to track the camera
+	MatrixTransform* transform = new MatrixTransform;
+	transform->setDataVariance(Object::DYNAMIC);
+	transform->setMatrix(Matrixf::translate(Vec3f(0.f, 0.f, 0.f)));
+	transform->setCullCallback(new CameraTrackCallback);
+	transform->addChild(dome);
 
-    // add a pat to track the camera
-    MatrixTransform* transform = new MatrixTransform;
-    transform->setDataVariance( Object::DYNAMIC );
-    transform->setMatrix( Matrixf::translate( Vec3f(0.f, 0.f, 0.f) ));
-    transform->setCullCallback( new CameraTrackCallback );
-    transform->addChild(dome);
-    scene->addChild(transform);
+	setupShader(ref_node);
 
-    scene->addChild(ref_node);
+	ref_node->setNodeMask(scene->getNormalSceneMask() |
+							  scene->getReflectedSceneMask() |
+						      scene->getRefractedSceneMask());
 
-    mainNode->addChild(scene);
-    mainNode->addChild(light);
+	scene->addChild(transform);
+	scene->addChild(ref_node);
 
-    osgOcean::ShaderManager::instance().enableShaders(true);
+	mainNode->addChild(scene);
+	mainNode->addChild(light);
 
-    cubeMapDirty = false;
-    surfDirty = false;
-    sceneDirty = false;
+	osgOcean::ShaderManager::instance().enableShaders(true);
 
-    return mainNode;
+	cubeMapDirty = false;
+	surfDirty = false;
+	sceneDirty = false;
+
+	return mainNode;
 }
 
 void Ocean::loadCubeMapImages(QString dir)
@@ -308,8 +334,9 @@ void Ocean::updateSkyDome(vizkit3d_ocean::SkyDome* dome, OceanScene* scene)
             scene->getRefractedSceneMask());
 }
 
-void Ocean::updateMainNode ( Node* node )
+void Ocean::updateMainNode( Node* node )
 {
+	std::cout << "Ocean::updateMainNode" << std::endl;
 }
 
 void Ocean::updateDataIntern(base::Vector3d const& value)

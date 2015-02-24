@@ -10,7 +10,7 @@
 		<visual>
 			<origin rpy="-1.570796327 0 3.141592654" xyz="-0.2 0 0.75" />
 			<geometry>
-				<mesh filename="robot/GIRONA500/g500_March11.osg" />
+				<mesh filename="GIRONA500/g500_March11.osg" />
 			</geometry>
 		</visual>
 	</link>
@@ -18,7 +18,7 @@
 		<visual>
 			<origin rpy="3.141592654 0 0" xyz="0 0 0" />
 			<geometry>
-				<mesh filename="robot/ARM5E/ARM5E_part0.osg" />
+				<mesh filename="ARM5E/ARM5E_part0.osg" />
 			</geometry>
 		</visual>
 	</link>
@@ -39,7 +39,7 @@
 		<visual>
 			<origin rpy="3.141592654 0 0" xyz="0.0 0 -0.13" />
 			<geometry>
-				<mesh filename="robot/ARM5E/ARM5E_part1.osg" />
+				<mesh filename="ARM5E/ARM5E_part1.osg" />
 			</geometry>
 		</visual>
 	</link>
@@ -55,7 +55,7 @@
 		<visual>
 			<origin rpy="1.570796327 0 -0.087262726" xyz="0 0 0" />
 			<geometry>
-				<mesh filename="robot/ARM5E/ARM5E_part2.osg" />
+				<mesh filename="ARM5E/ARM5E_part2.osg" />
 			</geometry>
 		</visual>
 	</link>
@@ -70,7 +70,7 @@
 		<visual>
 			<origin rpy="1.570796327 0 0.4014" xyz="0 0 0" />
 			<geometry>
-				<mesh filename="robot/ARM5E/ARM5E_part3.osg" />
+				<mesh filename="ARM5E/ARM5E_part3.osg" />
 			</geometry>
 		</visual>
 	</link>
@@ -85,7 +85,7 @@
 		<visual>
 			<origin rpy="0 -1.570796327 0" xyz="0 0 -0.028" />
 			<geometry>
-				<mesh filename="robot/ARM5E/ARM5E_part4_base.osg" />
+				<mesh filename="ARM5E/ARM5E_part4_base.osg" />
 			</geometry>
 		</visual>
 	</link>
@@ -107,7 +107,7 @@
 		<visual>
 			<origin rpy="0 -1.570796327 0" xyz="0 0 0" />
 			<geometry>
-				<mesh filename="robot/ARM5E/ARM5E_part4_jaw1.osg" />
+				<mesh filename="ARM5E/ARM5E_part4_jaw1.osg" />
 			</geometry>
 		</visual>
 	</link>
@@ -124,7 +124,7 @@
 		<visual>
 			<origin rpy="0 -1.570796327 0" xyz="0 0 0" />
 			<geometry>
-				<mesh filename="robot/ARM5E/ARM5E_part4_jaw2.osg" />
+				<mesh filename="ARM5E/ARM5E_part4_jaw2.osg" />
 			</geometry>
 		</visual>
 	</link>

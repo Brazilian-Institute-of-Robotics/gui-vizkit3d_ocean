@@ -10,3 +10,6 @@ rock_standard_layout()
 
 install(DIRECTORY resources/textures/
     DESTINATION share/vizkit3d_ocean/textures)
+    
+install(DIRECTORY resources/shaders/
+    DESTINATION share/vizkit3d_ocean/shaders)
