@@ -1,15 +1,29 @@
 require 'vizkit'
 Orocos.initialize
 
-view3d = Vizkit.vizkit3d_widget
-ocean = Vizkit.default_loader.Ocean
-flat_fish = Vizkit.default_loader.RigidBodyStateVisualization
-#flat_fish.loadModel 'flatfish.ive'
-view3d.setCameraManipulator("Default")
-view3d.setEnvironmentPlugin(ocean)
+current_path = File.expand_path(File.dirname(__FILE__))
 
-view3d.setCameraEye(0, 0, 20)
-view3d.setCameraLookAt(0, 1, 20)
+view3d = Vizkit.vizkit3d_widget
+
+flatfish1 = Vizkit.default_loader.RobotVisualization
+flatfish1.modelFile = "#{current_path}/robots/flatfish.urdf"
+flatfish1.setPose(Qt::Vector3D.new(0,1.5,3),Qt::Quaternion::fromAxisAndAngle(0,0,0,0))
+
+flatfish2 = Vizkit.default_loader.RigidBodyStateVisualization
+flatfish2.loadModel "#{current_path}/robots/FLATFISH/flatfish_05.osg"
+flatfish2.setPose(Qt::Vector3D.new(0,-1.5,3),Qt::Quaternion::fromAxisAndAngle(0,0,0,0))
+
+ocean = Vizkit.default_loader.Ocean
+
+view3d.setGrid(false)
+view3d.setCameraManipulator("Trackball")
+view3d.setEnvironmentPlugin(ocean)
+view3d.setAxes(false);
+view3d.setTransformer(false);
+
+view3d.setCameraEye(-5, -5, 15)
+view3d.setCameraLookAt(0, 0, 0)
 view3d.setCameraUp(0, 0, 1)
 view3d.show
+
 Vizkit.exec

@@ -14,7 +14,7 @@
 #include <osgOcean/OceanScene>
 #include <osgOcean/FFTOceanSurface>
 
-#include "SkyDome.h"
+#include "SkyDome.hpp"
 
 class SceneModel {
 

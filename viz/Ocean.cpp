@@ -11,6 +11,13 @@ using namespace vizkit3d;
 using namespace osg;
 using namespace osgOcean;
 
+
+enum DrawMask
+{
+    CAST_SHADOW             = (0x1<<30),
+    RECEIVE_SHADOW          = (0x1<<29),
+};
+
 class CameraTrackCallback: public osg::NodeCallback
 {
 public:
@@ -82,7 +89,7 @@ Ocean::Ocean()
     , silt(true)
     , underwaterDOF(true)
     , underwaterScattering(true)
-    , distortion(true)
+    , distortion(false)
     , glare(true)
 {
     loadCubeMapImages(cubeMapPath);
@@ -100,25 +107,27 @@ ref_ptr<Group> Ocean::getRefNode()
 
 ref_ptr<Node> Ocean::createMainNode()
 {
-    TextureCubeMap* cubeMap = createCubeMap();
-    updateCubeMap(cubeMap);
-    FFTOceanTechnique* surface = createSurface();
-    updateSurface(surface, cubeMap);
-    OceanScene* scene = createScene(surface);
-    updateScene(scene);
-    vizkit3d_ocean::SkyDome* dome = createSkyDome(cubeMap);
-    updateSkyDome(dome, scene);
-    LightSource* light = createLight();
-    updateLight(light);
-
     Group* mainNode = new Group;
-    mainNode->addChild(scene);
-    scene->addChild(ref_node);
-    mainNode->addChild(light);
 
     osg::ref_ptr<osg::StateSet> state = mainNode->getOrCreateStateSet();
     state->setGlobalDefaults();
     state->setDataVariance(osg::Object::DYNAMIC);
+
+    TextureCubeMap* cubeMap = createCubeMap();
+    updateCubeMap(cubeMap);
+
+    FFTOceanTechnique* surface = createSurface();
+    updateSurface(surface, cubeMap);
+
+    OceanScene* scene = createScene(surface);
+    updateScene(scene);
+
+    vizkit3d_ocean::SkyDome* dome = createSkyDome(cubeMap);
+    updateSkyDome(dome, scene);
+
+    LightSource* light = createLight();
+    updateLight(light);
+
 
     // add a pat to track the camera
     MatrixTransform* transform = new MatrixTransform;
@@ -128,11 +137,17 @@ ref_ptr<Node> Ocean::createMainNode()
     transform->addChild(dome);
     scene->addChild(transform);
 
+    scene->addChild(ref_node);
+
+    mainNode->addChild(scene);
+    mainNode->addChild(light);
+
     osgOcean::ShaderManager::instance().enableShaders(true);
 
     cubeMapDirty = false;
     surfDirty = false;
     sceneDirty = false;
+
     return mainNode;
 }
 
@@ -261,6 +276,7 @@ void Ocean::updateScene(osgOcean::OceanScene* scene)
 LightSource* Ocean::createLight()
 {
     LightSource* lightSource = new LightSource();
+    lightSource->setNodeMask(lightSource->getNodeMask() & ~CAST_SHADOW & ~RECEIVE_SHADOW);
     lightSource->setLocalStateSetModes();
     lightSource->getLight()->setLightNum(0);
     return lightSource;

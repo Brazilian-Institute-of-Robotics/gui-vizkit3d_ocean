@@ -1,0 +1,13 @@
+<robot name="flatfish">
+	<link name="base_link">
+	    
+	    <visual>
+			<origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+			<geometry>
+				<mesh filename="FLATFISH/flatfish_05.osg"/>
+			</geometry>
+	    </visual>
+    
+	</link>
+
+</robot>

@@ -1,0 +1,138 @@
+<?xml version="1.0" ?>
+<sdf version="1.4">
+	<model name="flatfish">
+		<pose>0 0 1.0 0 0 3.1416</pose>
+		<link name="flatfish_body">
+			<visual name="visual">
+				<geometry>
+					<mesh>
+					<uri>model://flatfish/flatfish_05.dae</uri>
+					</mesh>
+				</geometry>
+			</visual>
+
+			<visual name="visual_thruster_0">				
+				<pose>0.51 0 0 0 0 0</pose>
+				<geometry>
+					<cylinder>
+						<radius>0.05</radius>
+						<length>0.1</length>
+					</cylinder>
+				</geometry>
+			</visual>
+			
+			<visual name="visual_thruster_1">				
+				<pose>-0.46 0 0 0 0 0</pose>
+				<geometry>
+					<cylinder>
+						<radius>0.05</radius>
+						<length>0.1</length>
+					</cylinder>
+				</geometry>
+			</visual>
+			
+			<visual name="visual_thruster_2">				
+				<pose>-0.62 0.0 0.025 1.5708 0 0</pose>
+				<geometry>
+					<cylinder>
+						<radius>0.05</radius>
+						<length>0.1</length>
+					</cylinder>
+				</geometry>
+			</visual>
+			
+			<visual name="visual_thruster_3">				
+				<pose>0.875 0.0 0.085 1.5708 0 0</pose>
+				<geometry>
+					<cylinder>
+						<radius>0.05</radius>
+						<length>0.1</length>
+					</cylinder>
+				</geometry>
+			</visual>
+			
+			<visual name="visual_thruster_4">				
+				<pose>0 0.4 0.085 0 1.5708 0</pose>
+				<geometry>
+					<cylinder>
+						<radius>0.05</radius>
+						<length>0.1</length>
+					</cylinder>
+				</geometry>
+			</visual>
+			
+			<visual name="visual_thruster_5">				
+				<pose>0 -0.4 0.085 0 1.5708 0</pose>
+				<geometry>
+					<cylinder>
+						<radius>0.05</radius>
+						<length>0.1</length>
+					</cylinder>
+				</geometry>
+			</visual>
+			
+			<collision name="collision">
+				<geometry>
+					<mesh>
+					<uri>model://flatfish/collision.STL</uri>
+					</mesh>
+				</geometry>
+			</collision>
+			<inertial>
+				<pose>0 0 -1 0 0 0</pose>
+                <inertia>
+                    <ixx>0.1</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0.0</ixz>
+                    <iyy>0.01</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.0</izz>
+                </inertia>
+                <mass>10.0</mass>
+			</inertial>
+		</link>
+		
+		<plugin name="model_fluid" filename="libmodel_fluid_plugin.so">
+			<buoyancy>
+				<ref_link>flatfish_body</ref_link>
+				<params>
+					<compensation>1.0</compensation>
+					<buoyancy_center>0 0 0</buoyancy_center>
+					<viscous_damping>1 1 1</viscous_damping>
+					<limit>0.5</limit>
+				</params>
+			</buoyancy>
+			<thruster>
+				<name>thruster_0</name>
+				<pose>0.51 0 0</pose>
+				<initial_force>0 0 1000</initial_force>
+			</thruster>
+			<thruster>
+				<name>thruster_1</name>
+				<pose>-0.46 0 0</pose>
+				<initial_force>0 0 1000</initial_force>
+			</thruster>
+			<thruster>
+				<name>thruster_2</name>
+				<pose>-0.62 0.0 0.025</pose>
+				<initial_force>0 0 0</initial_force>
+			</thruster>
+			<thruster>
+				<name>thruster_3</name>
+				<pose>0.875 0.0 0.085</pose>
+				<initial_force>0 0 0</initial_force>
+			</thruster>
+			<thruster>
+				<name>thruster_4</name>
+				<pose>0 0.4 0.085</pose>
+				<initial_force>0 0 0</initial_force>
+			</thruster>
+			<thruster>
+				<name>thruster_5</name>
+				<pose>0 -0.4 0.085</pose>
+				<initial_force>0 0 0</initial_force>
+			</thruster>
+		</plugin>
+		
+	</model>
+</sdf>
