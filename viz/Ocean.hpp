@@ -66,7 +66,10 @@ protected:
 
         osg::ref_ptr<osg::Group> getRefNode();
 
+        void setupShader(osg::Node *node);
+
 private:
+
         osg::ref_ptr<osg::Group> ref_node;
 
         bool      cubeMapDirty;

@@ -98,6 +98,26 @@ ref_ptr<Group> Ocean::getRefNode()
     return ref_node;
 }
 
+void Ocean::setupShader(osg::Node* node)
+{
+    static const char model_vertex[] = "default_scene.vert";
+    static const char model_fragment[] = "default_scene.frag";
+
+    osg::ref_ptr<osg::Program> program =
+        osgOcean::ShaderManager::instance().createProgram(
+                "object_shader", model_vertex, model_fragment, "", "");
+
+    if (program.valid()) {
+        program->addBindAttribLocation("aTangent", 6);
+        node->getOrCreateStateSet()->setAttributeAndModes(program,
+                osg::StateAttribute::ON);
+        node->getStateSet()->addUniform(
+                new osg::Uniform("uOverlayMap", 1));
+        node->getStateSet()->addUniform(
+                new osg::Uniform("uNormalMap", 2));
+    }
+}
+
 ref_ptr<Node> Ocean::createMainNode()
 {
     TextureCubeMap* cubeMap = createCubeMap();
@@ -123,10 +143,16 @@ ref_ptr<Node> Ocean::createMainNode()
     // add a pat to track the camera
     MatrixTransform* transform = new MatrixTransform;
     transform->setDataVariance( Object::DYNAMIC );
-    transform->setMatrix( Matrixf::translate( Vec3f(0.f, 0.f, 0.f) ));
+    transform->setMatrix(Matrixf::translate( Vec3f(0.f, 0.f, 0.f) ));
     transform->setCullCallback( new CameraTrackCallback );
     transform->addChild(dome);
     scene->addChild(transform);
+
+    setupShader(ref_node);
+
+    ref_node->setNodeMask(scene->getNormalSceneMask() |
+            scene->getReflectedSceneMask() |
+            scene->getRefractedSceneMask());
 
     osgOcean::ShaderManager::instance().enableShaders(true);
 
@@ -292,8 +318,9 @@ void Ocean::updateSkyDome(vizkit3d_ocean::SkyDome* dome, OceanScene* scene)
             scene->getRefractedSceneMask());
 }
 
-void Ocean::updateMainNode ( Node* node )
+void Ocean::updateMainNode( Node* node )
 {
+	std::cout << "Ocean::updateMainNode" << std::endl;
 }
 
 void Ocean::updateDataIntern(base::Vector3d const& value)
