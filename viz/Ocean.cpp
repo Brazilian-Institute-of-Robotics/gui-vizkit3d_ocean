@@ -83,7 +83,7 @@ Ocean::Ocean()
     , underwaterDOF(false)
     , underwaterScattering(true)
     , distortion(true)
-    , glare(true)
+    , glare(false)
 {
     loadCubeMapImages(cubeMapPath);
     ref_node = new osg::Group;
