@@ -4,7 +4,7 @@ Orocos.initialize
 view3d = Vizkit.vizkit3d_widget
 ocean = Vizkit.default_loader.Ocean
 flat_fish = Vizkit.default_loader.RigidBodyStateVisualization
-#flat_fish.loadModel 'flatfish.ive'
+view3d.setGrid(false)
 view3d.setCameraManipulator("Default")
 view3d.setEnvironmentPlugin(ocean)
 
