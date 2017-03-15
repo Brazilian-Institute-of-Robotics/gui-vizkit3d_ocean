@@ -45,46 +45,46 @@ static osg::Vec3f qt2osg(QVector3D const& v)
 }
 
 
-Ocean::Ocean()
+Ocean::Ocean(const OceanParameters& ocean_parameters)
     : cubeMapDirty(false)
     , cubeMapPath("vizkit3d_ocean/textures/sky_clear")
     , lightColor(105, 138, 174)
-
-    , surfDirty(true)
-    , surfEndless(true)
-    , surfWaveScale(1e-7)
-    , surfDepth(1000)
-    , surfWindDirection(1, 2)
-    , surfWindSpeed(3.0)
-    , surfReflectionDamping(0.2)
-    , surfIsChoppy(true)
-    , surfChoppyFactor(-2.5)
-    , surfCrestFoam(true)
-    , surfCrestFoamHeight(2.2)
-    , surfFoamBottomHeight(2.2)
-    , surfFoamTopHeight(2.2)
-
-    , sceneDirty(true)
-    , airFogColor(199, 226, 255)
-    , airFogDensity(0.012)
-    , sunPosition(326, 1212, 1275)
-    , sunDiffuseColor(191, 191, 191)
-    , uwFogColor(27, 57, 109)
-    , uwFogDensity(0.02)
-    , uwAttenuation(0.015, 0.0075, 0.005)
-    , uwDiffuseColor(27, 57, 109)
-    , glareAttenuation(0.8)
-
-    , reflections(true)
-    , refractions(false)
-    , heightmap(true)
-    , godRays(true)
-    , silt(true)
-    , underwaterDOF(false)
-    , underwaterScattering(true)
-    , distortion(true)
-    , glare(false)
 {
+    surfDirty = ocean_parameters.surfDirty;
+    surfEndless = ocean_parameters.surfEndless;
+    surfWaveScale = ocean_parameters.surfWaveScale;
+    surfDepth = ocean_parameters.surfDepth;
+    surfWindDirection = ocean_parameters.surfWindDirection;
+    surfWindSpeed = ocean_parameters.surfWindSpeed;
+    surfReflectionDamping = ocean_parameters.surfReflectionDamping;
+    surfIsChoppy = ocean_parameters.surfIsChoppy;
+    surfChoppyFactor = ocean_parameters.surfChoppyFactor;
+    surfCrestFoam = ocean_parameters.surfCrestFoam;
+    surfCrestFoamHeight = ocean_parameters.surfCrestFoamHeight;
+    surfFoamBottomHeight = ocean_parameters.surfFoamBottomHeight;
+    surfFoamTopHeight = ocean_parameters.surfFoamTopHeight;
+
+    sceneDirty = ocean_parameters.sceneDirty;
+    airFogColor = ocean_parameters.airFogColor;
+    airFogDensity = ocean_parameters.airFogDensity;
+    sunPosition = ocean_parameters.sunPosition;
+    sunDiffuseColor = ocean_parameters.sunDiffuseColor;
+    uwFogColor = ocean_parameters.uwFogColor;
+    uwFogDensity = ocean_parameters.uwFogDensity;
+    uwAttenuation = ocean_parameters.uwAttenuation;
+    uwDiffuseColor = ocean_parameters.uwDiffuseColor;
+    glareAttenuation = ocean_parameters.glareAttenuation;
+
+    reflections = ocean_parameters.reflections;
+    refractions = ocean_parameters.refractions;
+    heightmap = ocean_parameters.heightmap;
+    godRays = ocean_parameters.godRays;
+    silt = ocean_parameters.silt;
+    underwaterDOF = ocean_parameters.underwaterDOF;
+    underwaterScattering = ocean_parameters.underwaterScattering;
+    distortion = ocean_parameters.distortion;
+    glare = ocean_parameters.glare;
+
     loadCubeMapImages(cubeMapPath);
     ref_node = new osg::Group;
 }
